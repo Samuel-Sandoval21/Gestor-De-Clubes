@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Próximos Eventos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold" style="color: #0A00A4;"><i class="fas fa-calendar-alt me-2"></i>Próximos Eventos</h2>
+    <a href="#" class="btn btn-outline-primary btn-sm disabled">Ver Calendario Completo</a>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="bg-primary text-white rounded p-2 text-center me-3" style="width: 50px;">
+                        <small>OCT</small>
+                        <strong>15</strong>
+                    </div>
+                    <div>
+                        <h6 class="mb-0 text-dark fw-bold">Taller de Desarrollo Web</h6>
+                        <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> STEM Center - Aula 103</small><br>
+                        <span class="badge bg-light text-dark border">30 cupos disponibles</span>
+                    </div>
+                </div>
+                <div class="mt-3 text-end">
+                    <button class="btn btn-sm btn-primary"><i class="fas fa-check me-1"></i> Confirmar Asistencia</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="bg-danger text-white rounded p-2 text-center me-3" style="width: 50px;">
+                        <small>NOV</small>
+                        <strong>02</strong>
+                    </div>
+                    <div>
+                        <h6 class="mb-0 text-dark fw-bold">Torneo de Ajedrez</h6>
+                        <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i> Salón de Usos Múltiples</small><br>
+                        <span class="badge bg-light text-dark border">12 cupos disponibles</span>
+                    </div>
+                </div>
+                <div class="mt-3 text-end">
+                    <button class="btn btn-sm btn-primary"><i class="fas fa-check me-1"></i> Confirmar Asistencia</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="/Home/Index" class="btn btn-outline-secondary">← Volver al Panel Principal</a>
+</div>

@@ -1,31 +1,47 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #f4f6f9; /* Un gris muy claro para que las tarjetas blancas resalten */
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Estilos personalizados para la Universidad Fidélitas */
+.btn-primary {
+    background-color: #0A00A4;
+    border-color: #0A00A4;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+    .btn-primary:hover {
+        background-color: #08008a;
+        border-color: #08008a;
+    }
+
+.btn-outline-primary {
+    color: #0A00A4;
+    border-color: #0A00A4;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #0A00A4;
+        color: white;
+    }
+
+/* Sombras suaves para el diseño "bonito" */
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075) !important;
+}
+
+/* Estilos del footer */
+footer {
+    margin-top: auto;
 }

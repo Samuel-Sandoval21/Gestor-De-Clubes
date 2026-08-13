@@ -2,100 +2,98 @@
 <html lang="es">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Gestor de Clubes</title>
 
-    <script type="importmap"></script>
-
-    <link rel="stylesheet"
-          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet"
-          href="~/css/site.css"
-          asp-append-version="true" />
-    <link rel="stylesheet"
-          href="~/GestorDeClubes.MVC.styles.css"
-          asp-append-version="true" />
+    <!-- Importación de Bootstrap y FontAwesome -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/GestorDeClubes.MVC.styles.css" asp-append-version="true" />
 </head>
-
 <body>
 
+    <!-- Barra superior institucional (Detalle extra para el prototipo) -->
+    <div class="bg-dark text-white py-1 px-3 d-flex justify-content-between align-items-center" style="font-size: 0.8rem;">
+        <span><i class="fas fa-university me-2"></i> Universidad Fidélitas - Bienestar Estudiantil</span>
+        <span>
+            <i class="fas fa-user-circle me-1"></i>
+            <!-- SIMULACIÓN DE ROL (Cambia esto manualmente en el HomeController para pruebas) -->
+            <span class="badge bg-warning text-dark">@(ViewBag.UserRole ?? "Estudiante")</span>
+        </span>
+    </div>
+
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-
+        <nav class="navbar navbar-expand-lg shadow-sm" style="background-color: #0A00A4;">
             <div class="container">
-
-                <a class="navbar-brand fw-bold"
-                   asp-controller="Home"
-                   asp-action="Index">
-                    Gestor de Clubes
+                <!-- Logo / Nombre de la App -->
+                <a class="navbar-brand fw-bold text-white" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-people-arrows me-2"></i> Gestor de Clubes
                 </a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNavbar"
-                        aria-controls="mainNavbar"
-                        aria-expanded="false"
-                        aria-label="Mostrar navegación">
-
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                     <span class="navbar-toggler-icon"></span>
-
                 </button>
 
-                <div class="collapse navbar-collapse"
-                     id="mainNavbar">
-
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <!-- Menú de Navegación Principal -->
                     <ul class="navbar-nav me-auto">
-
+                        <!-- 1. Botón Inicio -->
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Inicio
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home me-1"></i> Inicio
                             </a>
-
                         </li>
 
+                        <!-- 2. Botón Clubes Activos -->
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Prototipo" asp-action="Clubes">
+                                <i class="fas fa-users me-1"></i> Clubes
+                            </a>
+                        </li>
+
+                        <!-- 3. Botón Próximos Eventos -->
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Prototipo" asp-action="Eventos">
+                                <i class="fas fa-calendar-alt me-1"></i> Calendario
+                            </a>
+                        </li>
+
+                        <!-- Separador visual (solo en pantallas grandes) -->
+                        <li class="nav-item ms-2 me-2 text-white-50 d-none d-lg-block">|</li>
+
+                        <!-- 4. Botón Login / Acceder -->
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Prototipo" asp-action="Login">
+                                <i class="fas fa-sign-in-alt me-1"></i> Login
+                            </a>
+                        </li>
                     </ul>
-
                 </div>
-
             </div>
-
         </nav>
     </header>
 
-
+    <!-- Contenido principal de la página -->
     <main class="container py-4">
-
         @RenderBody()
-
     </main>
 
-
-    <footer class="border-top text-muted py-3 mt-auto">
-
-        <div class="container">
-
-            &copy; 2026 - Gestor de Clubes
-            - Universidad Fidélitas
-
+    <!-- Footer -->
+    <footer class="border-top py-4 mt-auto" style="background-color: #f8f9fa;">
+        <div class="container text-center">
+            <p class="mb-0 text-muted">
+                &copy; 2026 - <strong>Gestor de Clubes</strong> - Universidad Fidélitas<br>
+                <small>Desarrollado por: Adbeel, Alejandro, Andrei y Samuel</small>
+            </p>
         </div>
-
     </footer>
 
+    <!-- Scripts de Bootstrap y jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js"
-    asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @await RenderSectionAsync(
-        "Scripts",
-        required: false
-    )
-
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
