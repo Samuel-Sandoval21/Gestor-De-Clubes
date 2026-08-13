@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="GestorDeClubes.Business/GestorDeClubes.Business.csproj" />
+  <Project Path="GestorDeClubes.Data/GestorDeClubes.Data.csproj" />
+  <Project Path="GestorDeClubes.MVC/GestorDeClubes.MVC.csproj" />
+  <Project Path="GestorDeClubes.Repository/GestorDeClubes.Repository.csproj" />
+</Solution>
