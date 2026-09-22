@@ -1,7 +1,9 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
 
@@ -11,26 +13,67 @@
 
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
     <link rel="stylesheet"
           href="~/css/site.css"
           asp-append-version="true" />
+
     <link rel="stylesheet"
           href="~/GestorDeClubes.MVC.styles.css"
           asp-append-version="true" />
+
+    <style>
+        :root {
+            --color-primario: #10069F;
+            --color-primario-hover: #0D0585;
+        }
+
+        .navbar-institucional {
+            background-color: var(--color-primario);
+        }
+
+        .btn-cerrar-sesion {
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            border-radius: 6px;
+            padding: 6px 14px;
+            background: transparent;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-cerrar-sesion:hover {
+            background-color: var(--color-primario-hover);
+            color: #FFFFFF;
+        }
+
+        .usuario-navbar {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+    </style>
 </head>
 
 <body>
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-institucional shadow-sm">
 
             <div class="container">
+
+                <!-- Nombre del sistema -->
 
                 <a class="navbar-brand fw-bold"
                    asp-controller="Home"
                    asp-action="Index">
+
                     Gestor de Clubes
+
                 </a>
+
+                <!-- Botón de menú para dispositivos móviles -->
 
                 <button class="navbar-toggler"
                         type="button"
@@ -47,6 +90,8 @@
                 <div class="collapse navbar-collapse"
                      id="mainNavbar">
 
+                    <!-- Navegación principal -->
+
                     <ul class="navbar-nav me-auto">
 
                         <li class="nav-item">
@@ -54,20 +99,70 @@
                             <a class="nav-link"
                                asp-controller="Home"
                                asp-action="Index">
+
                                 Inicio
+
                             </a>
 
                         </li>
 
                     </ul>
 
+                    <!-- Opciones de cuenta -->
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="d-flex flex-column flex-lg-row
+                                    align-items-lg-center gap-3 mt-3 mt-lg-0">
+
+                            <!-- Correo del usuario autenticado -->
+
+                            <span class="usuario-navbar">
+
+                                @User.Identity.Name
+
+                            </span>
+
+                            <!-- HU-02: Cerrar sesión mediante POST -->
+
+                            <form asp-controller="Cuenta"
+                                  asp-action="Logout"
+                                  method="post"
+                                  class="m-0">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn-cerrar-sesion">
+
+                                    Cerrar sesión
+
+                                </button>
+
+                            </form>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Si no hay sesión, mostrar acceso al login -->
+
+                        <a class="btn-cerrar-sesion text-decoration-none mt-3 mt-lg-0"
+                           asp-controller="Cuenta"
+                           asp-action="Login">
+
+                            Iniciar sesión
+
+                        </a>
+                    }
+
                 </div>
 
             </div>
 
         </nav>
-    </header>
 
+    </header>
 
     <main class="container py-4">
 
@@ -75,12 +170,11 @@
 
     </main>
 
-
     <footer class="border-top text-muted py-3 mt-auto">
 
         <div class="container">
 
-            &copy; 2026 - Gestor de Clubes
+            &copy; @DateTime.Now.Year - Gestor de Clubes
             - Universidad Fidélitas
 
         </div>
@@ -88,9 +182,11 @@
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js"
-    asp-append-version="true"></script>
+            asp-append-version="true"></script>
 
     @await RenderSectionAsync(
         "Scripts",
