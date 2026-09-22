@@ -15,6 +15,12 @@ namespace GestorDeClubes.Data.Context
         {
         }
 
+        // ==========================================
+        // HU-05: REGISTROS DE AUDITORÍA
+        // ==========================================
+
+        public DbSet<AuditoriaAcceso> AuditoriaAccesos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -65,6 +71,41 @@ namespace GestorDeClubes.Data.Context
 
                 entity.Property(r => r.Descripcion)
                     .HasMaxLength(250);
+            });
+
+            // ==========================================
+            // HU-05: TABLA AUDITORIA_ACCESOS
+            // ==========================================
+
+            builder.Entity<AuditoriaAcceso>(entity =>
+            {
+                entity.ToTable("AUDITORIA_ACCESOS");
+
+                entity.HasKey(a => a.AuditoriaAccesoID);
+
+                entity.Property(a => a.AuditoriaAccesoID)
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(a => a.UsuarioID)
+                    .IsRequired();
+
+                entity.Property(a => a.TipoEvento)
+                    .HasMaxLength(20)
+                    .IsRequired();
+
+                entity.Property(a => a.FechaHora)
+                    .IsRequired();
+
+                // Cada registro pertenece a un usuario.
+                // Restringimos el borrado en cascada para
+                // conservar la integridad de la bitácora.
+                entity.HasOne(a => a.Usuario)
+                    .WithMany()
+                    .HasForeignKey(a => a.UsuarioID)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Facilita la consulta cronológica.
+                entity.HasIndex(a => a.FechaHora);
             });
 
             // ==========================================

@@ -1,4 +1,5 @@
 ﻿
+using GestorDeClubes.Data.Context;
 using GestorDeClubes.Data.Entities;
 using GestorDeClubes.MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -12,15 +13,18 @@ namespace GestorDeClubes.MVC.Controllers
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
         private readonly IWebHostEnvironment _environment;
+        private readonly ApplicationDbContext _context;
 
         public CuentaController(
             UserManager<Usuario> userManager,
             SignInManager<Usuario> signInManager,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _environment = environment;
+            _context = context;
         }
 
         // ==========================================
@@ -96,13 +100,32 @@ namespace GestorDeClubes.MVC.Controllers
 
             if (resultado.Succeeded)
             {
-                usuario.UltimoAcceso = DateTime.UtcNow;
+                // HU-01: Actualizar último acceso.
+                var fechaIngreso = DateTime.UtcNow;
+
+                usuario.UltimoAcceso = fechaIngreso;
 
                 await _userManager.UpdateAsync(usuario);
+
+                // ==========================================
+                // HU-05: REGISTRAR INGRESO EXITOSO
+                // ==========================================
+
+                var auditoria = new AuditoriaAcceso
+                {
+                    UsuarioID = usuario.Id,
+                    TipoEvento = "INGRESO",
+                    FechaHora = fechaIngreso
+                };
+
+                _context.AuditoriaAccesos.Add(auditoria);
+
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Home");
             }
 
+            // HU-04: Cuenta bloqueada por intentos fallidos.
             if (resultado.IsLockedOut)
             {
                 ModelState.AddModelError(
@@ -130,7 +153,7 @@ namespace GestorDeClubes.MVC.Controllers
         }
 
         // ==========================================
-        // HU-02: CERRAR SESIÓN
+        // HU-02 Y HU-05: CERRAR SESIÓN Y REGISTRAR CIERRE
         // ==========================================
 
         [HttpPost]
@@ -138,6 +161,25 @@ namespace GestorDeClubes.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
+            // Obtener el usuario antes de cerrar su sesión.
+            var usuario = await _userManager.GetUserAsync(User);
+
+            if (usuario != null)
+            {
+                // HU-05: Registrar cierre de sesión.
+                var auditoria = new AuditoriaAcceso
+                {
+                    UsuarioID = usuario.Id,
+                    TipoEvento = "CIERRE",
+                    FechaHora = DateTime.UtcNow
+                };
+
+                _context.AuditoriaAccesos.Add(auditoria);
+
+                await _context.SaveChangesAsync();
+            }
+
+            // HU-02: Finalizar la sesión.
             await _signInManager.SignOutAsync();
 
             return RedirectToAction("Login", "Cuenta");
@@ -341,7 +383,6 @@ namespace GestorDeClubes.MVC.Controllers
         [AllowAnonymous]
         public IActionResult PasswordRestablecida()
         {
-            // Crearemos esta vista en el siguiente paso.
             return View();
         }
 

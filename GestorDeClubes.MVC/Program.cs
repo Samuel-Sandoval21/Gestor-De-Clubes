@@ -100,10 +100,14 @@ using (var scope = app.Services.CreateScope())
     // Crear los cuatro roles si todavía no existen.
     await IdentitySeeder.InicializarRolesAsync(services);
 
-    // Crear una cuenta ficticia únicamente en Development.
+    // Crear cuentas ficticias únicamente en Development.
     if (app.Environment.IsDevelopment())
     {
+        // Cuenta estudiantil para probar el inicio de sesión.
         await UsuarioPruebaSeeder.InicializarAsync(services);
+
+        // Cuenta administrativa para consultar la bitácora.
+        await AdministradorPruebaSeeder.InicializarAsync(services);
     }
 }
 
