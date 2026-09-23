@@ -1,0 +1,162 @@
+﻿@model GestorDeClubes.MVC.ViewModels.UsuarioEditarViewModel
+
+@{
+    ViewData["Title"] = "Editar usuario";
+
+    var roles = ViewBag.Roles as List<string>
+        ?? new List<string>();
+}
+
+<div class="container py-4">
+
+    <!-- ENCABEZADO -->
+    <div class="mb-4">
+
+        <h2 class="fw-bold" style="color: #100c83;">
+            Editar usuario
+        </h2>
+
+        <p class="text-muted">
+            Actualizá la información del usuario seleccionado.
+        </p>
+
+    </div>
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3">
+
+            <h5 class="fw-bold mb-0" style="color: #100c83;">
+                Información del usuario
+            </h5>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <form asp-controller="AdministracionUsuarios"
+                  asp-action="Editar"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <!-- IDENTIFICADOR -->
+                <input asp-for="Id" type="hidden" />
+
+                <!-- ERRORES GENERALES -->
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="row g-3">
+
+                    <!-- NOMBRE -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Nombre"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Nombre"
+                               class="form-control"
+                               maxlength="150" />
+
+                        <span asp-validation-for="Nombre"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                    <!-- APELLIDOS -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Apellidos"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="Apellidos"
+                               class="form-control"
+                               maxlength="150" />
+
+                        <span asp-validation-for="Apellidos"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                    <!-- CORREO INSTITUCIONAL -->
+                    <div class="col-md-12">
+
+                        <label asp-for="CorreoInstitucional"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <input asp-for="CorreoInstitucional"
+                               class="form-control"
+                               type="email"
+                               maxlength="256" />
+
+                        <span asp-validation-for="CorreoInstitucional"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                    <!-- ROL -->
+                    <div class="col-md-12">
+
+                        <label asp-for="Rol"
+                               class="form-label fw-semibold">
+                        </label>
+
+                        <select asp-for="Rol"
+                                class="form-select">
+
+                            <option value="">
+                                -- Seleccione un rol --
+                            </option>
+
+                            @foreach (var rol in roles)
+                            {
+                                <option value="@rol">
+                                    @rol
+                                </option>
+                            }
+
+                        </select>
+
+                        <span asp-validation-for="Rol"
+                              class="text-danger small">
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- BOTONES -->
+                <div class="d-flex justify-content-end gap-2 mt-4">
+
+                    <a asp-controller="AdministracionUsuarios"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Actualizar usuario
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

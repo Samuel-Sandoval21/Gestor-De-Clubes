@@ -1,0 +1,242 @@
+﻿@model GestorDeClubes.MVC.ViewModels.UsuarioListaViewModel
+
+@{
+    ViewData["Title"] = "Administración de usuarios";
+}
+
+<div class="container py-4">
+
+    <!-- ENCABEZADO -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold" style="color: #100c83;">
+                Administración de usuarios
+            </h2>
+
+            <p class="text-muted mb-0">
+                Gestioná los usuarios registrados en el Gestor de Clubes Universitarios.
+            </p>
+        </div>
+
+        <a asp-controller="AdministracionUsuarios"
+           asp-action="Crear"
+           class="btn btn-primary">
+            + Crear usuario
+        </a>
+    </div>
+
+    <!-- MENSAJE DE CONFIRMACIÓN -->
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["MensajeExito"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar">
+            </button>
+        </div>
+    }
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            @TempData["MensajeError"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar">
+            </button>
+
+        </div>
+    }
+
+    <!-- TARJETA PRINCIPAL -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0" style="color: #100c83;">
+                Usuarios registrados
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <!-- BÚSQUEDA -->
+            <form asp-controller="AdministracionUsuarios"
+                  asp-action="Index"
+                  method="get"
+                  class="row g-2 mb-4">
+
+                <div class="col-md-9">
+                    <input type="text"
+                           name="busqueda"
+                           value="@Model.Busqueda"
+                           class="form-control"
+                           placeholder="Buscar por nombre, apellido o correo institucional..."
+                           aria-label="Buscar usuarios" />
+                </div>
+
+                <div class="col-md-3 d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary flex-fill">
+                        Buscar
+                    </button>
+
+                    <a asp-controller="AdministracionUsuarios"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Limpiar
+                    </a>
+
+                </div>
+            </form>
+
+            <!-- LISTADO -->
+            @if (Model.Usuarios.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre completo</th>
+                                <th>Correo institucional</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var usuario in Model.Usuarios)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @usuario.NombreCompleto
+                                    </td>
+
+                                    <td>
+                                        @usuario.CorreoInstitucional
+                                    </td>
+
+                                    <td>
+                                        @usuario.Rol
+                                    </td>
+
+                                    <td>
+                                        @if (usuario.Estado)
+                                        {
+                                            <span class="badge bg-success">
+                                                Activo
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Inactivo
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a asp-controller="AdministracionUsuarios"
+                                           asp-action="Editar"
+                                           asp-route-id="@usuario.Id"
+                                           class="btn btn-sm btn-outline-primary">
+                                            Editar
+                                        </a>
+
+                                        <td class="text-center">
+
+                                            <div class="d-flex justify-content-center gap-2">
+
+
+                                                <!-- ACTIVAR / DESACTIVAR -->
+                                                <form asp-controller="AdministracionUsuarios"
+                                                      asp-action="CambiarEstado"
+                                                      method="post"
+                                                      class="d-inline"
+                                                      onsubmit="return confirm('@(usuario.Estado
+                                                                      ? "¿Estás seguro de que querés desactivar este usuario?"
+                                                                      : "¿Estás seguro de que querés activar este usuario?")');">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@usuario.Id" />
+
+                                                    @if (usuario.Estado)
+                                                    {
+                                                        <button type="submit"
+                                                                class="btn btn-sm btn-outline-danger">
+                                                            Desactivar
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="submit"
+                                                                class="btn btn-sm btn-outline-success">
+                                                            Activar
+                                                        </button>
+                                                    }
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="text-muted small mt-3">
+                    Total de usuarios encontrados:
+                    <strong>@Model.Usuarios.Count</strong>
+                </div>
+            }
+            else
+            {
+                <!-- ESCENARIO 3: SIN RESULTADOS -->
+                <div class="alert alert-info text-center mb-0">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Busqueda))
+                    {
+                        <p class="mb-0">
+                            No se encontraron usuarios que coincidan
+                            con el criterio de búsqueda ingresado.
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="mb-0">
+                            Actualmente no existen usuarios registrados.
+                        </p>
+                    }
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
