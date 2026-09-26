@@ -5,6 +5,10 @@ using GestorDeClubes.Data.Seed;
 using GestorDeClubes.MVC.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using GestorDeClubes.Business.Interfaces;
+using GestorDeClubes.Business.Services;
+using GestorDeClubes.Repository.Interfaces;
+using GestorDeClubes.Repository.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +55,18 @@ builder.Services.AddIdentity<Usuario, Rol>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+// ==========================================
+// REPOSITORIES
+// ==========================================
+
+builder.Services.AddScoped<IRolRepository, RolRepository>();
+
+// ==========================================
+// SERVICIOS DE NEGOCIO
+// ==========================================
+
+builder.Services.AddScoped<IRolService, RolService>();
 
 // ==========================================
 // COOKIE DE AUTENTICACIÓN
@@ -120,3 +136,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
